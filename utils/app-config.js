@@ -36,7 +36,7 @@ export const AppConfig = {
     allowUniversalAccessFromFileURLs: true,
     mixedContentMode: 'always', // String is correct for this property
     overScrollMode: 'never', // String is correct for this property
-    geolocationEnabled: true,
+    geolocationEnabled: false,
     mediaPlaybackRequiresUserGesture: false,
     allowsInlineMediaPlayback: true,
     cacheEnabled: true,
@@ -82,10 +82,6 @@ export const AppConfig = {
   
   // رسائل الأذونات
   PERMISSION_MESSAGES: {
-    LOCATION_TITLE: 'إذن الموقع',
-    LOCATION_MESSAGE: 'يرجى تفعيل إذن الموقع من إعدادات التطبيق.',
-    GPS_TITLE: 'خدمة الموقع',
-    GPS_MESSAGE: 'يرجى تفعيل GPS من إعدادات الهاتف.',
     NOTIFICATION_TITLE: 'الإشعارات',
     NOTIFICATION_MESSAGE: 'يرجى تفعيل الإشعارات من الإعدادات.',
     CAMERA_TITLE: 'إذن الكاميرا',

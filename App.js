@@ -14,7 +14,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import WebView from "react-native-webview";
-import * as Location from "expo-location";
+
 import NetInfo from "@react-native-community/netinfo";
 import * as Updates from "expo-updates";
 import OneSignal from "react-native-onesignal";
@@ -36,7 +36,7 @@ const MyWebView = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [canGoBack, setCanGoBack] = useState(false);
   const [playerId, setPlayerId] = useState(null);
-  const [hasPermission, setHasPermission] = useState(false);
+
   const [retryCount, setRetryCount] = useState(0);
   const [lastUrl, setLastUrl] = useState(AppConfig.BASE_URL);
 
@@ -108,18 +108,9 @@ const MyWebView = () => {
   const requestPermissions = useCallback(async () => {
     try {
       console.log("🔐 Ask for permissions...");
-      const locationGranted = await PermissionUtils.requestAllPermissions();
-      setHasPermission(locationGranted);
-
-      if (locationGranted) {
-        const location = await PermissionUtils.getCurrentLocation();
-        if (location) {
-          console.log("📍 Location obtained successfully");
-        }
-      }
+      await PermissionUtils.requestMediaPermissions();
     } catch (error) {
       console.error("❌ Error in asking for permissions:", error);
-      setHasPermission(false);
     }
   }, []);
 
@@ -261,7 +252,7 @@ const MyWebView = () => {
     handleBackButtonWithConfirmation,
     requestPermissions,
     setupOneSignal,
-    isConnected,
+    isConnected
   ]);
 
   // Injected JavaScript

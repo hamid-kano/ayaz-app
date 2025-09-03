@@ -144,12 +144,8 @@ export const PrintingConfig = {
 
   // مناطق التوصيل
   DELIVERY_AREAS: {
-    RIYADH_CENTER: { id: 'riyadh_center', name: 'وسط الرياض', cost: 15 },
-    RIYADH_NORTH: { id: 'riyadh_north', name: 'شمال الرياض', cost: 20 },
-    RIYADH_SOUTH: { id: 'riyadh_south', name: 'جنوب الرياض', cost: 20 },
-    RIYADH_EAST: { id: 'riyadh_east', name: 'شرق الرياض', cost: 25 },
-    RIYADH_WEST: { id: 'riyadh_west', name: 'غرب الرياض', cost: 25 },
-    OTHER_CITIES: { id: 'other_cities', name: 'مدن أخرى', cost: 50 }
+    INSIDE_RIYADH: { id: 'inside_riyadh', name: 'داخل الرياض', cost: 15 },
+    OUTSIDE_RIYADH: { id: 'outside_riyadh', name: 'خارج الرياض', cost: 50 }
   },
 
   // رسائل خاصة بالمطبعة
