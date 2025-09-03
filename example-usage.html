@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مطبعة اياز - مثال الاستخدام</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { 
+            padding: 15px 20px; 
+            margin: 10px; 
+            font-size: 16px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #1e88e5; 
+            color: white; 
+            cursor: pointer; 
+        }
+        button:hover { background: #0d47a1; }
+        .result { 
+            margin: 20px 0; 
+            padding: 15px; 
+            background: #f5f5f5; 
+            border-radius: 5px; 
+        }
+        .recording { background: #ffebee; }
+        .recording.active { background: #c8e6c9; }
+    </style>
+</head>
+<body>
+    <h1>مطبعة اياز - اختبار الوظائف</h1>
+    
+    <div>
+        <h3>اختيار الصور والملفات:</h3>
+        <button onclick="pickImageFromGallery()">اختيار صورة من المعرض</button>
+        <button onclick="takePhoto()">التقاط صورة</button>
+        <button onclick="pickDocument()">اختيار ملف</button>
+    </div>
+    
+    <div>
+        <h3>التسجيل الصوتي:</h3>
+        <button id="recordBtn" onclick="toggleRecording()">بدء التسجيل</button>
+    </div>
+    
+    <div id="result" class="result" style="display: none;">
+        <h4>النتيجة:</h4>
+        <pre id="resultText"></pre>
+    </div>
+
+    <script>
+        let isRecording = false;
+        
+        function showResult(data) {
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('resultText').textContent = JSON.stringify(data, null, 2);
+        }
+        
+        function toggleRecording() {
+            const btn = document.getElementById('recordBtn');
+            if (!isRecording) {
+                startRecording();
+                btn.textContent = 'إيقاف التسجيل';
+                btn.className = 'recording active';
+                isRecording = true;
+            } else {
+                stopRecording();
+                btn.textContent = 'بدء التسجيل';
+                btn.className = '';
+                isRecording = false;
+            }
+        }
+        
+        // استقبال الرسائل من التطبيق
+        window.addEventListener('message', function(event) {
+            const data = JSON.parse(event.data);
+            
+            switch(data.type) {
+                case 'imageSelected':
+                    showResult({
+                        type: 'صورة من المعرض',
+                        name: data.data.name,
+                        size: data.data.base64?.length || 0
+                    });
+                    break;
+                    
+                case 'photoTaken':
+                    showResult({
+                        type: 'صورة من الكاميرا',
+                        name: data.data.name,
+                        size: data.data.base64?.length || 0
+                    });
+                    break;
+                    
+                case 'documentSelected':
+                    showResult({
+                        type: 'ملف',
+                        name: data.data.name,
+                        size: data.data.size,
+                        mimeType: data.data.type
+                    });
+                    break;
+                    
+                case 'recordingStarted':
+                    showResult({ type: 'بدء التسجيل', status: 'جاري التسجيل...' });
+                    break;
+                    
+                case 'recordingStopped':
+                    showResult({
+                        type: 'تسجيل صوتي',
+                        name: data.data.name,
+                        size: data.data.base64?.length || 0
+                    });
+                    isRecording = false;
+                    document.getElementById('recordBtn').textContent = 'بدء التسجيل';
+                    document.getElementById('recordBtn').className = '';
+                    break;
+            }
+        });
+        
+        // التحقق من وجود الوظائف
+        if (typeof pickImageFromGallery === 'undefined') {
+            console.log('الوظائف غير متاحة - يجب تشغيل الموقع داخل التطبيق');
+        }
+    </script>
+</body>
+</html>

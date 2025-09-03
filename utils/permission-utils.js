@@ -1,5 +1,7 @@
 import { Alert, Platform, Linking } from "react-native";
 import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
+import { Audio } from "expo-av";
 import AppConfig from "./app-config";
 
 /**
@@ -73,6 +75,10 @@ export default class PermissionUtils {
         title = messages.MEDIA_TITLE;
         message = messages.MEDIA_MESSAGE;
         break;
+      case 'MICROPHONE':
+        title = 'إذن الميكروفون';
+        message = 'يرجى تفعيل إذن الميكروفون من إعدادات التطبيق.';
+        break;
       default:
         title = 'إذن مطلوب';
         message = 'يحتاج التطبيق إلى هذا الإذن للعمل بشكل صحيح';
@@ -126,7 +132,41 @@ export default class PermissionUtils {
   }
 
   /**
-   * طلب أذونات الوسائط فقط
+   * التحقق من إذن الكاميرا وطلبه
+   */
+  static async handleCameraPermission() {
+    try {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (status !== 'granted') {
+        this.showPermissionDeniedAlert('CAMERA');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('💥 Error requesting camera permission:', error);
+      return false;
+    }
+  }
+
+  /**
+   * التحقق من إذن الميكروفون وطلبه
+   */
+  static async handleMicrophonePermission() {
+    try {
+      const { status } = await Audio.requestPermissionsAsync();
+      if (status !== 'granted') {
+        this.showPermissionDeniedAlert('MICROPHONE');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error('💥 Error requesting microphone permission:', error);
+      return false;
+    }
+  }
+
+  /**
+   * طلب جميع الأذونات المطلوبة
    * @returns {Promise<boolean>} نجح في الحصول على الأذونات
    */
   static async requestMediaPermissions() {
@@ -135,12 +175,16 @@ export default class PermissionUtils {
       
       // طلب إذن الوسائط
       const mediaGranted = await this.handleMediaPermission();
+      const cameraGranted = await this.handleCameraPermission();
+      const micGranted = await this.handleMicrophonePermission();
       
       console.log('📊 Permission request results:', {
-        media: mediaGranted
+        media: mediaGranted,
+        camera: cameraGranted,
+        microphone: micGranted
       });
 
-      return mediaGranted;
+      return mediaGranted && cameraGranted && micGranted;
     } catch (error) {
       console.error('💥 Error requesting permissions:', error);
       return false;

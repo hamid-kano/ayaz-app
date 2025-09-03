@@ -28,6 +28,7 @@ import NotificationService from "./utils/notification-service";
 import PermissionUtils from "./utils/permission-utils";
 import WebErrorHandler from "./utils/web-error-handler";
 import AppConfig from "./utils/app-config";
+import MediaService from "./utils/media-service";
 
 const MyWebView = () => {
   // States
@@ -36,7 +37,7 @@ const MyWebView = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [canGoBack, setCanGoBack] = useState(false);
   const [playerId, setPlayerId] = useState(null);
-
+  const [recording, setRecording] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [lastUrl, setLastUrl] = useState(AppConfig.BASE_URL);
 
@@ -210,6 +211,65 @@ const MyWebView = () => {
             console.error("❌ Error in sharing:", error);
           });
         }
+        
+        // Handle media actions
+        else if (parsedMessage.type === "pickImage") {
+          MediaService.pickImageFromGallery().then(result => {
+            if (result) {
+              webViewRef.current?.postMessage(JSON.stringify({
+                type: 'imageSelected',
+                data: result
+              }));
+            }
+          });
+        }
+        
+        else if (parsedMessage.type === "takePhoto") {
+          MediaService.takePhoto().then(result => {
+            if (result) {
+              webViewRef.current?.postMessage(JSON.stringify({
+                type: 'photoTaken',
+                data: result
+              }));
+            }
+          });
+        }
+        
+        else if (parsedMessage.type === "pickDocument") {
+          MediaService.pickDocument().then(result => {
+            if (result) {
+              webViewRef.current?.postMessage(JSON.stringify({
+                type: 'documentSelected',
+                data: result
+              }));
+            }
+          });
+        }
+        
+        else if (parsedMessage.type === "startRecording") {
+          MediaService.startRecording().then(recordingInstance => {
+            if (recordingInstance) {
+              setRecording(recordingInstance);
+              webViewRef.current?.postMessage(JSON.stringify({
+                type: 'recordingStarted'
+              }));
+            }
+          });
+        }
+        
+        else if (parsedMessage.type === "stopRecording") {
+          if (recording) {
+            MediaService.stopRecording(recording).then(result => {
+              setRecording(null);
+              if (result) {
+                webViewRef.current?.postMessage(JSON.stringify({
+                  type: 'recordingStopped',
+                  data: result
+                }));
+              }
+            });
+          }
+        }
       } catch (error) {
         console.log("📝 Non-JSON message:", message);
       }
@@ -286,6 +346,37 @@ const MyWebView = () => {
           version: "${AppConfig.APP_VERSION}"
         };
         
+        // Media functions
+        window.pickImageFromGallery = function() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'pickImage'
+          }));
+        };
+        
+        window.takePhoto = function() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'takePhoto'
+          }));
+        };
+        
+        window.pickDocument = function() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'pickDocument'
+          }));
+        };
+        
+        window.startRecording = function() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'startRecording'
+          }));
+        };
+        
+        window.stopRecording = function() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'stopRecording'
+          }));
+        };
+        
         console.log('✅ JavaScript loaded successfully');
       } catch(e) {
         console.error('❌ Error in JavaScript:', e);
@@ -338,6 +429,7 @@ const MyWebView = () => {
               WebErrorHandler.handleWebError(webViewRef, nativeEvent);
             }}
             onMessage={handleWebViewMessage}
+            injectedJavaScriptBeforeContentLoaded={injectedJavaScript}
             onShouldStartLoadWithRequest={(request) => {
               const url = request.url;
 
