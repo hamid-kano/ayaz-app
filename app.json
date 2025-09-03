@@ -1,0 +1,122 @@
+{
+  "expo": {
+    "name": "مطبعة اياز",
+    "slug": "com_ayaz_printing",
+    "version": "25.1.2025",
+    "orientation": "portrait",
+    "icon": "./assets/ic_launcher.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-img.png",
+      "resizeMode": "contain",
+      "align": "center",
+      "backgroundColor": "#FFFFFF"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "notification": {
+      "icon": "./assets/icon_256.png"
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#023c69",
+      "translucent": false
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ayaz.printing",
+      "buildNumber": "7",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
+        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos.",
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/ic_launcher.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.ayaz.printing",
+      "versionCode": 21,
+      "permissions": [
+        "CAMERA",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_MEDIA_LOCATION",
+        "FOREGROUND_SERVICE",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/ic_launcher.png"
+    },
+    "extra": {
+      "oneSignalAppId": "YOUR_ONESIGNAL_APP_ID",
+      "eas": {
+        "build": {
+          "experimental": {
+            "ios": {
+              "appExtensions": [
+                {
+                  "targetName": "OneSignalNotificationServiceExtension",
+                  "bundleIdentifier": "com.ayaz.printing.OneSignalNotificationServiceExtension",
+                  "entitlements": {
+                    "com.apple.security.application-groups": [
+                      "group.com.ayaz.printing.onesignal"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    },
+    "plugins": [
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35,
+            "buildToolsVersion": "35.0.0",
+            "minSdkVersion": 24,
+            "useProguard": true,
+            "supportsTablet": true,
+            "resizeable": true
+          },
+          "ios": {
+            "deploymentTarget": "15.1"
+          }
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ],
+    "owner": "ayaz-printing"
+  }
+}

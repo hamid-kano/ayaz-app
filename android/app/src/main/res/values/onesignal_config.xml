@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- تكوين أيقونة الإشعارات لـ OneSignal -->
+    <string name="onesignal_notification_accent_color">#FFFFFF</string>
+    <!-- <drawable name="ic_onesignal_large_icon_default">@drawable/notification_icon</drawable> -->
+    <drawable name="ic_stat_onesignal_default">@drawable/notification_icon</drawable>
+</resources>
