@@ -7,7 +7,7 @@ export const AppConfig = {
   APP_VERSION: 'v1.0.0',
   
   // الروابط
-  BASE_URL: 'https://ayaz-printing.com/',
+  BASE_URL: 'https://ghostwhite-mosquito-524345.hostingersite.com/',
   PLAY_STORE_LINK: 'https://play.google.com/store/apps/details?id=com.ayaz.printing',
   APP_STORE_LINK: 'https://apps.apple.com/app/ayaz-printing/id123456789',
   
