@@ -28,7 +28,7 @@ import NotificationService from "./utils/notification-service";
 import PermissionUtils from "./utils/permission-utils";
 import WebErrorHandler from "./utils/web-error-handler";
 import AppConfig from "./utils/app-config";
-import MediaService from "./utils/media-service";
+import MediaService from "./utils/media-service-simple";
 
 const MyWebView = () => {
   // States
