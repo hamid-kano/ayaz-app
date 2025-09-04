@@ -14,6 +14,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import WebView from "react-native-webview";
+import * as SplashScreen from "expo-splash-screen";
 
 import NetInfo from "@react-native-community/netinfo";
 import * as Updates from "expo-updates";
@@ -30,6 +31,9 @@ import WebErrorHandler from "./utils/web-error-handler";
 import AppConfig from "./utils/app-config";
 import MediaService from "./utils/media-service-simple";
 
+// منع إخفاء Splash Screen تلقائياً
+SplashScreen.preventAutoHideAsync();
+
 const MyWebView = () => {
   // States
   const [loading, setLoading] = useState(true);
@@ -40,6 +44,7 @@ const MyWebView = () => {
   const [recording, setRecording] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [lastUrl, setLastUrl] = useState(AppConfig.BASE_URL);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   const webViewRef = useRef();
   const deviceType = Device.osName === "iOS" ? "iphone" : "android";
@@ -282,8 +287,25 @@ const MyWebView = () => {
     console.log("🚀 Launching the app...");
 
     // Initial setup
-    requestPermissions();
-    setupOneSignal();
+    const initializeApp = async () => {
+      try {
+        await requestPermissions();
+        await setupOneSignal();
+        // إخفاء Splash Screen بعد 3 ثوان كحد أقصى
+        setTimeout(() => {
+          if (!appIsReady) {
+            SplashScreen.hideAsync();
+            setAppIsReady(true);
+          }
+        }, 3000);
+      } catch (error) {
+        console.error('خطأ في تهيئة التطبيق:', error);
+        SplashScreen.hideAsync();
+        setAppIsReady(true);
+      }
+    };
+
+    initializeApp();
 
     // Network monitor
     const unsubscribeNetInfo = NetInfo.addEventListener((state) => {
@@ -312,7 +334,8 @@ const MyWebView = () => {
     handleBackButtonWithConfirmation,
     requestPermissions,
     setupOneSignal,
-    isConnected
+    isConnected,
+    appIsReady
   ]);
 
   // Injected JavaScript
@@ -419,6 +442,9 @@ const MyWebView = () => {
               console.log("✅ Uploaded successfully");
               setLoading(false);
               setProgress(1);
+              setAppIsReady(true);
+              // إخفاء Splash Screen
+              SplashScreen.hideAsync();
               // Inject player ID after loading
               if (playerId) {
                 injectPlayerIdToWebView(playerId);
