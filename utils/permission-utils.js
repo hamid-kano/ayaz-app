@@ -1,7 +1,6 @@
 import { Alert, Platform, Linking } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
-import { Audio } from "expo-av";
 import AppConfig from "./app-config";
 
 /**
@@ -75,10 +74,7 @@ export default class PermissionUtils {
         title = messages.MEDIA_TITLE;
         message = messages.MEDIA_MESSAGE;
         break;
-      case 'MICROPHONE':
-        title = 'إذن الميكروفون';
-        message = 'يرجى تفعيل إذن الميكروفون من إعدادات التطبيق.';
-        break;
+
       default:
         title = 'إذن مطلوب';
         message = 'يحتاج التطبيق إلى هذا الإذن للعمل بشكل صحيح';
@@ -148,22 +144,7 @@ export default class PermissionUtils {
     }
   }
 
-  /**
-   * التحقق من إذن الميكروفون وطلبه
-   */
-  static async handleMicrophonePermission() {
-    try {
-      const { status } = await Audio.requestPermissionsAsync();
-      if (status !== 'granted') {
-        this.showPermissionDeniedAlert('MICROPHONE');
-        return false;
-      }
-      return true;
-    } catch (error) {
-      console.error('💥 Error requesting microphone permission:', error);
-      return false;
-    }
-  }
+
 
   /**
    * طلب جميع الأذونات المطلوبة
@@ -176,15 +157,13 @@ export default class PermissionUtils {
       // طلب إذن الوسائط
       const mediaGranted = await this.handleMediaPermission();
       const cameraGranted = await this.handleCameraPermission();
-      const micGranted = await this.handleMicrophonePermission();
       
       console.log('📊 Permission request results:', {
         media: mediaGranted,
-        camera: cameraGranted,
-        microphone: micGranted
+        camera: cameraGranted
       });
 
-      return mediaGranted && cameraGranted && micGranted;
+      return mediaGranted && cameraGranted;
     } catch (error) {
       console.error('💥 Error requesting permissions:', error);
       return false;
