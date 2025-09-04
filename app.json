@@ -57,7 +57,7 @@
       "favicon": "./assets/ic_launcher.png"
     },
     "extra": {
-      "oneSignalAppId": "YOUR_ONESIGNAL_APP_ID",
+      "oneSignalAppId": "9b65b6dc-1bd0-46bb-b0d9-27a19654ada4",
       "eas": {
         "build": {
           "experimental": {

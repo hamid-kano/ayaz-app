@@ -12,7 +12,7 @@ export const AppConfig = {
   APP_STORE_LINK: 'https://apps.apple.com/app/ayaz-printing/id123456789',
   
   // OneSignal
-  ONE_SIGNAL_APP_ID: 'YOUR_ONESIGNAL_APP_ID',
+  ONE_SIGNAL_APP_ID: '9b65b6dc-1bd0-46bb-b0d9-27a19654ada4',
   
   // الألوان
   COLORS: {
