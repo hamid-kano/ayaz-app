@@ -103,10 +103,10 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file('aaaa.jks')
-            storePassword 'ammar.114'
-            keyAlias 'key0'
-            keyPassword 'ammar.114'
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
     }
     buildTypes {
