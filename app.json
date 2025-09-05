@@ -16,7 +16,7 @@
       "fallbackToCacheTimeout": 0
     },
     "notification": {
-      "icon": "./assets/icon_256.png"
+      "icon": "./assets/ic_launcher.png"
     },
     "androidStatusBar": {
       "barStyle": "light-content",
@@ -28,7 +28,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ayaz.printing",
       "buildNumber": "7",
-      "infoPlist": {}
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access microphone for audio recording."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -39,7 +41,8 @@
       "versionCode": 21,
       "permissions": [
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "RECORD_AUDIO"
       ]
     },
     "web": {

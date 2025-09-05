@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio Recording Example</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h2>مثال التسجيل الصوتي</h2>
+    <button id="startBtn">🎤 بدء التسجيل</button>
+    <button id="stopBtn" disabled>⏹️ إيقاف التسجيل</button>
+    <audio id="audioPlayer" controls style="display:none;"></audio>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        startBtn.onclick = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    // عرض الصوت
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                    
+                    // تحويل إلى base64 وإرسال للتطبيق
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64 = reader.result.split(',')[1];
+                        if (window.sendAudioToApp) {
+                            window.sendAudioToApp({
+                                base64: base64,
+                                type: 'audio/wav',
+                                name: `recording_${Date.now()}.wav`
+                            });
+                        }
+                    };
+                    reader.readAsDataURL(audioBlob);
+                };
+
+                mediaRecorder.start();
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                console.log('🎤 بدء التسجيل...');
+            } catch (error) {
+                console.error('خطأ في التسجيل:', error);
+                alert('خطأ في الوصول للميكروفون');
+            }
+        };
+
+        stopBtn.onclick = () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                console.log('⏹️ تم إيقاف التسجيل');
+            }
+        };
+    </script>
+</body>
+</html>

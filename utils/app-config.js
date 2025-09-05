@@ -84,6 +84,8 @@ export const AppConfig = {
   PERMISSION_MESSAGES: {
     NOTIFICATION_TITLE: 'الإشعارات',
     NOTIFICATION_MESSAGE: 'يرجى تفعيل الإشعارات من الإعدادات.',
+    AUDIO_TITLE: 'إذن التسجيل الصوتي',
+    AUDIO_MESSAGE: 'يرجى تفعيل إذن التسجيل الصوتي من إعدادات التطبيق.',
     OPEN_SETTINGS: 'فتح الإعدادات',
     CANCEL: 'إلغاء'
   },

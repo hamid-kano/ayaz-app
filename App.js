@@ -45,6 +45,7 @@ const MyWebView = () => {
   const [retryCount, setRetryCount] = useState(0);
   const [lastUrl, setLastUrl] = useState(AppConfig.BASE_URL);
   const [appIsReady, setAppIsReady] = useState(false);
+  const [recording, setRecording] = useState(null);
 
   const webViewRef = useRef();
   const deviceType = Device.osName === "iOS" ? "iphone" : "android";
@@ -217,6 +218,11 @@ const MyWebView = () => {
           });
         }
         
+        // Handle audio recording (handled by WebView)
+        else if (parsedMessage.type === "audioRecorded") {
+          console.log('🎤 Audio recorded:', parsedMessage.data);
+        }
+        
 
       } catch (error) {
         console.log("📝 Non-JSON message:", message);
@@ -310,6 +316,17 @@ const MyWebView = () => {
           type: "${deviceType}",
           platform: "${Platform.OS}",
           version: "${AppConfig.APP_VERSION}"
+        };
+        
+        // Audio recording support (Web Audio API)
+        window.audioRecordingSupported = true;
+        
+        // Function to send recorded audio back to app
+        window.sendAudioToApp = function(audioData) {
+          window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'audioRecorded',
+            data: audioData
+          }));
         };
         
 
