@@ -1,58 +1,10 @@
-import { Alert, Platform, Linking } from "react-native";
-import * as MediaLibrary from "expo-media-library";
-import * as ImagePicker from "expo-image-picker";
 import AppConfig from "./app-config";
 
 /**
- * أدوات إدارة الأذونات المحسنة (بدون الموقع الجغرافي)
+ * أدوات إدارة الأذونات - الإشعارات فقط
  */
 export default class PermissionUtils {
   
-  /**
-   * التحقق من إذن الوسائط وطلبه إذا لزم الأمر
-   * @returns {Promise<boolean>} حالة الإذن
-   */
-  static async handleMediaPermission() {
-    try {
-      console.log('📷 Starting media permission check...');
-      
-      // التحقق من حالة الإذن الحالية
-      const { status: currentStatus } = await MediaLibrary.getPermissionsAsync();
-      console.log('📷 Current media permission status:', currentStatus);
-
-      // إذا كان الإذن ممنوحًا بالفعل
-      if (currentStatus === "granted") {
-        console.log('✅ Media permission already granted');
-        return true;
-      }
-
-      // إذا كان الإذن مرفوضًا نهائياً
-      if (currentStatus === "denied") {
-        console.log('❌ Media permission permanently denied');
-        this.showPermissionDeniedAlert('MEDIA');
-        return false;
-      }
-
-      // طلب إذن الوسائط
-      console.log('📱 Requesting media permission...');
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      console.log('📷 Media permission request result:', status);
-
-      if (status !== "granted") {
-        console.log('❌ Media permission denied');
-        this.showPermissionDeniedAlert('MEDIA');
-        return false;
-      }
-
-      console.log('✅ Media permission granted');
-      return true;
-      
-    } catch (error) {
-      console.error('💥 Error requesting media permission:', error);
-      return false;
-    }
-  }
-
   /**
    * عرض تنبيه رفض الإذن
    * @param {string} permissionType نوع الإذن
@@ -66,39 +18,12 @@ export default class PermissionUtils {
         title = messages.NOTIFICATION_TITLE;
         message = messages.NOTIFICATION_MESSAGE;
         break;
-      case 'CAMERA':
-        title = messages.CAMERA_TITLE;
-        message = messages.CAMERA_MESSAGE;
-        break;
-      case 'MEDIA':
-        title = messages.MEDIA_TITLE;
-        message = messages.MEDIA_MESSAGE;
-        break;
-
       default:
         title = 'إذن مطلوب';
         message = 'يحتاج التطبيق إلى هذا الإذن للعمل بشكل صحيح';
     }
 
-    Alert.alert(
-      title,
-      message,
-      [
-        {
-          text: messages.OPEN_SETTINGS,
-          onPress: () => {
-            console.log('🔧 Opening settings...');
-            Linking.openSettings();
-          }
-        },
-        {
-          text: messages.CANCEL,
-          style: "cancel",
-          onPress: () => console.log('❌ Settings opening cancelled')
-        }
-      ],
-      { cancelable: true }
-    );
+    console.log(`⚠️ Permission denied: ${title} - ${message}`);
   }
 
   /**
@@ -107,80 +32,36 @@ export default class PermissionUtils {
    */
   static async checkAllPermissions() {
     try {
-      console.log('🔍 Checking all permissions...');
+      console.log('🔍 Checking permissions (notifications only)...');
       
       const permissions = {
-        media: false
+        notifications: true // الإشعارات تتم إدارتها في NotificationService
       };
-
-      // التحقق من إذن الوسائط
-      const { status: mediaStatus } = await MediaLibrary.getPermissionsAsync();
-      permissions.media = mediaStatus === 'granted';
 
       console.log('📊 Permissions status:', permissions);
       return permissions;
     } catch (error) {
       console.error('💥 Error checking permissions:', error);
       return {
-        media: false
+        notifications: false
       };
     }
   }
 
   /**
-   * التحقق من إذن الكاميرا وطلبه
-   */
-  static async handleCameraPermission() {
-    try {
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-      if (status !== 'granted') {
-        this.showPermissionDeniedAlert('CAMERA');
-        return false;
-      }
-      return true;
-    } catch (error) {
-      console.error('💥 Error requesting camera permission:', error);
-      return false;
-    }
-  }
-
-
-
-  /**
-   * طلب جميع الأذونات المطلوبة
+   * طلب الأذونات المطلوبة (الإشعارات فقط)
    * @returns {Promise<boolean>} نجح في الحصول على الأذونات
    */
-  static async requestMediaPermissions() {
+  static async requestPermissions() {
     try {
-      console.log('📱 Requesting media permissions...');
+      console.log('📱 Requesting permissions (notifications only)...');
       
-      // طلب إذن الوسائط
-      const mediaGranted = await this.handleMediaPermission();
-      const cameraGranted = await this.handleCameraPermission();
-      
-      console.log('📊 Permission request results:', {
-        media: mediaGranted,
-        camera: cameraGranted
-      });
-
-      return mediaGranted && cameraGranted;
+      // الإشعارات تتم إدارتها في NotificationService
+      console.log('📊 Permission request completed');
+      return true;
     } catch (error) {
       console.error('💥 Error requesting permissions:', error);
       return false;
-    }
-  }
-
-  /**
-   * إعادة تعيين حالة الأذونات (للاختبار)
-   */
-  static async resetPermissions() {
-    try {
-      console.log('🔄 Resetting permissions...');
-      // هذه الوظيفة للاختبار فقط
-      // في التطبيق الحقيقي، يجب على المستخدم إعادة تعيين الأذونات من الإعدادات
-      console.log('ℹ️ Permissions must be reset from system settings');
-    } catch (error) {
-      console.error('💥 Error resetting permissions:', error);
     }
   }
 }

@@ -28,12 +28,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ayaz.printing",
       "buildNumber": "7",
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos.",
-        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos.",
-        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access camera for taking photos.",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access microphone for audio recording."
-      }
+      "infoPlist": {}
     },
     "android": {
       "adaptiveIcon": {
@@ -43,12 +38,6 @@
       "package": "com.ayaz.printing",
       "versionCode": 21,
       "permissions": [
-        "CAMERA",
-        "RECORD_AUDIO",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "ACCESS_MEDIA_LOCATION",
-        "FOREGROUND_SERVICE",
         "INTERNET",
         "ACCESS_NETWORK_STATE"
       ]
@@ -104,14 +93,7 @@
         }
       ],
 
-      [
-        "expo-media-library",
-        {
-          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
-          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
-          "isAccessMediaLocationEnabled": true
-        }
-      ]
+
     ],
     "owner": "ayaz-printing"
   }

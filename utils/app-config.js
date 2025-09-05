@@ -84,10 +84,6 @@ export const AppConfig = {
   PERMISSION_MESSAGES: {
     NOTIFICATION_TITLE: 'الإشعارات',
     NOTIFICATION_MESSAGE: 'يرجى تفعيل الإشعارات من الإعدادات.',
-    CAMERA_TITLE: 'إذن الكاميرا',
-    CAMERA_MESSAGE: 'يرجى تفعيل إذن الكاميرا من إعدادات التطبيق.',
-    MEDIA_TITLE: 'إذن الوسائط',
-    MEDIA_MESSAGE: 'يرجى تفعيل إذن الوسائط من إعدادات التطبيق.',
     OPEN_SETTINGS: 'فتح الإعدادات',
     CANCEL: 'إلغاء'
   },
