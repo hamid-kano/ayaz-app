@@ -4,10 +4,10 @@
     "slug": "com_ayaz_printing",
     "version": "25.1.2025",
     "orientation": "portrait",
-    "icon": "./assets/ic_launcher.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-img.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "align": "center",
       "backgroundColor": "#FFFFFF"
@@ -16,7 +16,7 @@
       "fallbackToCacheTimeout": 0
     },
     "notification": {
-      "icon": "./assets/ic_launcher.png"
+      "icon": "./assets/icon.png"
     },
     "androidStatusBar": {
       "barStyle": "light-content",
@@ -34,7 +34,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ic_launcher.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.ayaz.printing",
@@ -47,7 +47,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/ic_launcher.png"
+      "favicon": "./assets/icon.png"
     },
     "extra": {
       "oneSignalAppId": "9b65b6dc-1bd0-46bb-b0d9-27a19654ada4",
