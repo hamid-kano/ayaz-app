@@ -20,16 +20,35 @@
 
         startBtn.onclick = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
+                // التحقق من دعم المتصفح
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error('المتصفح لا يدعم التسجيل الصوتي');
+                }
+
+                console.log('🎤 طلب إذن الميكروفون...');
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 44100
+                    }
+                });
+                
+                console.log('✅ تم الحصول على إذن الميكروفون');
+                
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm;codecs=opus'
+                });
                 audioChunks = [];
 
                 mediaRecorder.ondataavailable = event => {
-                    audioChunks.push(event.data);
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
                 };
 
                 mediaRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     
                     // عرض الصوت
@@ -43,8 +62,8 @@
                         if (window.sendAudioToApp) {
                             window.sendAudioToApp({
                                 base64: base64,
-                                type: 'audio/wav',
-                                name: `recording_${Date.now()}.wav`
+                                type: 'audio/webm',
+                                name: `recording_${Date.now()}.webm`
                             });
                         }
                     };
@@ -56,8 +75,8 @@
                 stopBtn.disabled = false;
                 console.log('🎤 بدء التسجيل...');
             } catch (error) {
-                console.error('خطأ في التسجيل:', error);
-                alert('خطأ في الوصول للميكروفون');
+                console.error('خطأ في التسجيل:', error.message);
+                alert(`خطأ: ${error.message}`);
             }
         };
 

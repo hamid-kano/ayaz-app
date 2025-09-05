@@ -414,6 +414,12 @@ const MyWebView = () => {
               </View>
             )}
             {...AppConfig.WEBVIEW_SETTINGS}
+            mediaPlaybackRequiresUserGesture={false}
+            allowsInlineMediaPlayback={true}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            allowFileAccess={true}
+            allowUniversalAccessFromFileURLs={true}
           />
 
           <StatusBar

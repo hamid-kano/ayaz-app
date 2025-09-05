@@ -39,6 +39,7 @@ export const AppConfig = {
     geolocationEnabled: false,
     mediaPlaybackRequiresUserGesture: false,
     allowsInlineMediaPlayback: true,
+    mediaCapturePermissionGrantType: 'grant',
     cacheEnabled: true,
     incognito: false,
     bounces: false,
